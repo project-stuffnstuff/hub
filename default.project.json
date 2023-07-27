@@ -1,0 +1,39 @@
+{
+  "name": "lawlzwuff-01",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedFirst": {
+      "$ignoreUnknownInstances": true,
+      "$path": "src/first"
+    },
+
+    "ReplicatedStorage": {
+      "$ignoreUnknownInstances": true,
+      "Shared": {
+        "$path": "src/shared",
+        "$ignoreUnknownInstances": true
+      },
+      "Packages": {
+        "$path": "Packages"
+      }
+    },
+
+    "ServerScriptService": {
+      "$ignoreUnknownInstances": true,
+      "$path": "src/server"
+    },
+
+    "StarterPlayer": {
+      "$ignoreUnknownInstances": true,
+      "StarterPlayerScripts": {
+        "$path": "src/client",
+        "$ignoreUnknownInstances": true
+      },
+      "StarterCharacterScripts": {
+        "$path": "src/character",
+        "$ignoreUnknownInstances": true
+      }
+    }
+  }
+}

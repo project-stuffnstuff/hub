@@ -1,0 +1,8 @@
+[package]
+name = "scottricity/profileservice"
+version = "0.2.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+description = "Fork of ProfileService, made for wally (shared realm)"
+
+[dependencies]
