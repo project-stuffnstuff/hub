@@ -62,13 +62,13 @@ function controller:SetNameAsync(name: string)
     end):catch(warn)
 end
 
-function controller:RespondAsync(message: string, onTick: () -> ()?)
+function controller:RespondAsync(message: string, speed: number?)
     return Promise.new(function(resolve, reject)
         MessageBox.Message.MaxVisibleGraphemes = 0
         MessageBox.Message.Text = message
         for t=0,message:len(),1 do
             MessageBox.Message.MaxVisibleGraphemes = t
-            task.wait(0.08)
+            task.wait(0.1 / (speed or 1))
         end
         resolve()
     end):catch(warn)
