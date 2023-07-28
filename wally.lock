@@ -3,7 +3,7 @@
 registry = "test"
 
 [[package]]
-name = "admin/lawlzwuff-01"
+name = "admin/hub"
 version = "0.1.0"
 dependencies = [["Comm", "sleitnick/comm@0.3.1"], ["Component", "sleitnick/component@2.4.6"], ["Concur", "sleitnick/concur@0.1.2"], ["EnumList", "sleitnick/enum-list@2.0.1"], ["FastCastRedux", "scottricity/fastcastredux@0.1.0"], ["Fusion", "elttob/fusion@0.2.0"], ["Input", "sleitnick/input@2.1.1"], ["Knit", "sleitnick/knit@1.5.1"], ["Loader", "sleitnick/loader@2.0.0"], ["Log", "sleitnick/log@0.1.1"], ["Net", "sleitnick/net@0.1.0"], ["Option", "sleitnick/option@1.0.4"], ["PID", "sleitnick/pid@1.0.2"], ["ProfileService", "scottricity/profileservice@0.2.0"], ["Promise", "evaera/promise@4.0.0"], ["Quaternion", "sleitnick/quaternion@0.2.1"], ["ReplicaService", "scottricity/replicaservice@0.2.0"], ["Ser", "sleitnick/ser@1.0.5"], ["Shake", "sleitnick/shake@0.1.7"], ["Signal", "sleitnick/signal@1.5.0"], ["Silo", "sleitnick/silo@0.1.1"], ["Streamable", "sleitnick/streamable@1.2.4"], ["Symbol", "sleitnick/symbol@2.0.1"], ["TableUtil", "sleitnick/table-util@1.2.0"], ["TaskQueue", "sleitnick/task-queue@0.1.1"], ["Timer", "sleitnick/timer@1.1.2"], ["Trove", "sleitnick/trove@0.5.0"], ["WaitFor", "sleitnick/wait-for@0.2.2"]]
 

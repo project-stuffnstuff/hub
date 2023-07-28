@@ -1,5 +1,5 @@
 [package]
-name = "admin/lawlzwuff-01"
+name = "admin/hub"
 version = "0.1.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
@@ -13,6 +13,7 @@ Promise = "evaera/promise@4.0.0"
 ProfileService = "scottricity/profileservice@0.2.0"
 ReplicaService = "scottricity/replicaservice@0.2.0"
 Fusion = "elttob/fusion@0.2.0"
+FastCastRedux = "scottricity/fastcastredux@0.1.0"
 
 #RbxUtil
 Comm = "sleitnick/comm@0.3.1"
@@ -37,4 +38,3 @@ TaskQueue = "sleitnick/task-queue@0.1.1"
 Timer = "sleitnick/timer@1.1.2"
 Trove = "sleitnick/trove@0.5.0"
 WaitFor = "sleitnick/wait-for@0.2.2"
-FastCastRedux = "scottricity/fastcastredux@0.1.0"
