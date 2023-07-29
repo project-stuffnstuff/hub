@@ -65,6 +65,18 @@ local function LoadProfileAsync(player: Player)
     end):catch(warn)
 end
 
+local function ReleaseProfileAsync(player: Player)
+	return Promise.new(function(resolve, reject)
+		local profile = GameProfiles[player]
+		if profile ~= nil then
+			profile.Profile:Release()
+			return resolve()
+		else
+			return reject()
+		end 
+	end)
+end
+
 local function GetProfileAsync(player: Player)
     return Promise.new(function(resolve, reject)
         local profile = GameProfiles[player]
@@ -75,14 +87,31 @@ local function GetProfileAsync(player: Player)
     end):catch(warn)
 end
 
-
-
 local service = Knit.CreateService {
     Name = "DataService";
+    ProfileLoaded = Signal.new();
 }
 
-function service:LoadProfileAsync(player: Player)
-    return LoadProfileAsync(player)
+function service:LoadProfile(player: Player)
+    local req, profile = Promise.retry(LoadProfileAsync, 3, player):await()
+    if (req) then
+        service.ProfileLoaded:Fire(player, profile)
+        return profile
+    else
+        error(profile)
+    end
+end
+
+function service:GetProfileAsync(player: Player)
+    return GetProfileAsync(player)
+end
+
+function service:GetProfile(player: Player)
+    return GameProfiles[player]
+end
+
+function service:ReleaseProfileAsync(player: Player)
+    return ReleaseProfileAsync(player)
 end
 
 function service:KnitStart()
