@@ -33,6 +33,7 @@ local controller = Knit.CreateController {
 }
 
 local CameraController
+local PlayerService
 
 local PlayerGui = Knit.Player:WaitForChild("PlayerGui")
 local Dialogue: TypeLib.DialogueUI = PlayerGui:WaitForChild("Dialogue")
@@ -103,6 +104,8 @@ end
 
 function controller:KnitStart()
     CameraController = Knit.GetController("CameraController")
+    PlayerService = Knit.GetService("PlayerService")
+    
 end
 
 return controller

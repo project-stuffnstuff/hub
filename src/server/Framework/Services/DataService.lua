@@ -26,60 +26,67 @@ local ProfileStore = ProfileService.GetProfileStore(
 local GameProfiles = {}
 
 -- < Profile Functions >
-local function LoadProfileAsync(player: Player)
+local function LoadProfileAsync(userId: number, useLive: boolean?)
+    local player = Players:GetPlayerByUserId(userId)
     return Promise.new(function(resolve, reject)
-        local store = if RunService:IsStudio() then ProfileStore.Mock
+        local store = if (not useLive) and RunService:IsStudio() then ProfileStore.Mock
                             else ProfileStore
         local profile = store:LoadProfileAsync(
-            `Profile_{player.UserId}`,
+            `Profile_{userId}`,
             "ForceLoad"
         )
         if profile ~= nil then
-            profile:AddUserId(player.UserId)
+            profile:AddUserId(userId)
             profile:Reconcile()
             profile:ListenToRelease(function()
-                GameProfiles[player].Replica:Destroy()
-                GameProfiles[player] = nil
-                player:Kick()
+                if GameProfiles[userId] then
+                    local prof = GameProfiles[userId]
+                    if (prof.Replica) then
+                        prof.Replica:Destroy()
+                    end
+                    GameProfiles[userId] = nil
+                end
+                if (player) then
+                    player:Kick()
+                end
             end)
-            if player:IsA("Player") then
-                local player_profile = {
-                    Profile = profile;
-                    Replica = ReplicaService.NewReplica({
-                        ClassToken = ReplicaProfileToken;
-                        Tags = {Player = player};
-                        Data = profile.Data;
-                        Replication = "All";
-                    });
-                    _player = player;
-                }
-                setmetatable(player_profile, ReplicaProfile)
-                GameProfiles[player] = player_profile
-                return resolve(player_profile)
-            else
-                profile:Release()
-            end
+            local player_profile = {
+                Profile = profile;
+                Replica = if player then ReplicaService.NewReplica({
+                    ClassToken = ReplicaProfileToken;
+                    Tags = {Player = player};
+                    Data = profile.Data;
+                    Replication = "All";
+                }) else nil;
+                _player = player or nil
+            }
+            setmetatable(player_profile, ReplicaProfile)
+            GameProfiles[userId] = player_profile
+            return resolve(player_profile)
         else
             return reject("Could not load profile")
         end
     end):catch(warn)
 end
 
-local function ReleaseProfileAsync(player: Player)
+local function ReleaseProfileAsync(userId: number)
 	return Promise.new(function(resolve, reject)
-		local profile = GameProfiles[player]
+		local profile = GameProfiles[userId]
 		if profile ~= nil then
 			profile.Profile:Release()
+            if (profile.Replica) then
+                profile.Replica:Destroy()
+            end
 			return resolve()
 		else
 			return reject()
 		end 
-	end)
+	end):catch(warn)
 end
 
-local function GetProfileAsync(player: Player)
+local function GetProfileAsync(userId: number)
     return Promise.new(function(resolve, reject)
-        local profile = GameProfiles[player]
+        local profile = GameProfiles[userId]
         if profile ~= nil then
             return resolve(profile)
         end
@@ -92,26 +99,26 @@ local service = Knit.CreateService {
     ProfileLoaded = Signal.new();
 }
 
-function service:LoadProfile(player: Player)
-    local req, profile = Promise.retry(LoadProfileAsync, 3, player):await()
+function service:LoadProfile(userId: number, useLive: boolean?)
+    local req, profile = Promise.retry(LoadProfileAsync, 3, userId, useLive):await()
     if (req) then
-        service.ProfileLoaded:Fire(player, profile)
+        service.ProfileLoaded:Fire(profile._player, profile)
         return profile
     else
         error(profile)
     end
 end
 
-function service:GetProfileAsync(player: Player)
-    return GetProfileAsync(player)
+function service:GetProfileAsync(userId: number)
+    return GetProfileAsync(userId)
 end
 
-function service:GetProfile(player: Player)
-    return GameProfiles[player]
+function service:GetProfile(userId: number)
+    return GameProfiles[userId]
 end
 
-function service:ReleaseProfileAsync(player: Player)
-    return ReleaseProfileAsync(player)
+function service:ReleaseProfileAsync(userId: number)
+    return ReleaseProfileAsync(userId)
 end
 
 function service:KnitStart()
